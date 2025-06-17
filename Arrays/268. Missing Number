@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n=nums.size();
+        int sum=0;
+        int i=0;
+
+        //sum of given array
+        while(i<n){
+            sum=sum+nums[i];
+            i++;
+        }
+
+        //sum of array if no element was missing
+        int totalSum=0;
+        int j=0;
+        while(j<=n){
+            totalSum=totalSum+j;
+            j++;
+        } 
+        
+        return totalSum-sum;
+    }
+};
