@@ -1,0 +1,28 @@
+class Solution {
+public:
+    string frequencySort(string s) {
+        int n=s.length();
+        unordered_map<char,int>mpp;
+        vector<pair<char,int>>arr;
+        
+        //mapping of chars and their count
+        for(int i=0; i<n; i++){
+            mpp[s[i]]++;
+        }
+        
+        //add the mapped elements in the vector
+        for(auto it:mpp){
+            arr.push_back({it.first,it.second});
+        }
+
+        //sort the arr in descending order
+        sort(arr.begin(),arr.end(),[] (pair<char,int>&a , pair<char,int>&b){return a.second>b.second;});
+
+        string result="";
+
+        for(auto it:arr){
+            result += string(it.second,it.first);
+        }
+        return result;
+    }
+};
