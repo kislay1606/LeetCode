@@ -1,3 +1,4 @@
+//BRUTE
 class Solution {
 public:
     bool rotateString(string s, string goal) {
@@ -15,5 +16,22 @@ public:
             return true;
         }
         return false;
+    }
+};
+
+//OPTIMAL
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        if(s.length() != goal.length())
+        return false;
+        
+        string s1=s+s;
+
+        //not found
+        if(s1.find(goal) == string::npos)
+        return false;
+        
+        else return true;
     }
 };
