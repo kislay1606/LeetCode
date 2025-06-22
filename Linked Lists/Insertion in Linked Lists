@@ -1,0 +1,69 @@
+Node* InsertAtHead(Node* head, int ele){
+    Node* temp= new Node(ele,head);
+    return temp;
+}
+
+
+Node* InsertAtTail(Node* head, int ele){
+    Node* temp= head;
+
+    while(temp->next != NULL){
+        temp=temp->next;
+    }
+    Node* newNode=new Node(ele);
+    temp->next=newNode;
+    return head;
+}
+
+
+Node* InsertAtKthPosition(Node* head, int k, int ele){
+    //Base case
+    if(head==NULL){
+        if(k==1){
+            return new Node(ele);
+        }
+        else return NULL;
+    }
+    //first position
+    if(k==1){
+        return new Node(ele,head);
+    }
+
+    Node* temp=head;
+    int count=0;
+    while(temp != NULL){
+        count++;
+        if(count==k-1){
+            Node* newNode=new Node(ele,temp->next);
+            newNode->next=temp->next;
+            temp->next=newNode;
+            break;
+        }
+        temp=temp->next;
+    }
+    return head;
+}
+
+
+Node* InsertBeforeVal(Node* head, int val, int ele){
+    //Base case
+    if(head==NULL){
+        return NULL;
+    }
+    //base case
+    if(head->data==val){
+        return new Node(ele,head);
+    }
+
+    Node* temp=head;
+    while(temp->next != NULL){
+        if(temp->next->data==val){
+            Node* newNode=new Node(ele,temp->next);
+            newNode->next=temp->next;
+            temp->next=newNode;
+            break;
+        }
+        temp=temp->next;
+    }
+    return head;
+}
