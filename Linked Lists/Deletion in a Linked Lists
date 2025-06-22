@@ -1,0 +1,97 @@
+//Delete the head
+Node* deleteHead(Node* head){
+    if(head == NULL)
+    return NULL;
+
+    Node* temp=head;
+
+    head=head->next
+
+    delete temp;
+
+    return head;
+}
+
+//Delete the Tail
+Node* deleteTail(Node* head){
+    //if list is empty
+    if(head == NULL)
+    return NULL;
+
+    //if list has only 1 node
+    if(head->next == NULL){
+        delete head;
+        return NULL;
+    }
+
+    //find the second last node
+    Node* secondLast=head;
+    while(secondLast->next->next != NULL){
+        secondLast=secondLast->next;
+    }
+
+    delete (secondLast->next);
+
+    secondLast->next=NULL;
+
+    return head;
+}
+
+//Delete element at the kth position
+Node* deleteKthPosition(Node* head, int k){
+    //base case
+    if(head==NULL)
+    return NULL;
+
+    //if head is the kth position
+    if(k==1){
+        Node* temp=head;
+        head=head->next;
+
+        delete temp;
+        return head;
+    }
+
+    int count=0;
+    Node* prev=NULL;
+    Node* temp=head;
+    while(temp != NULL){
+        count++;
+        if(count==k){
+            prev->next=prev->next->next;
+            delete temp;
+            break;
+        }
+        prev=temp;
+        temp=temp->next;
+    }
+    return head;
+}
+
+//Delete any element
+Node* deleteElement(Node* head, int k){
+    //base case
+    if(head==NULL)
+    return NULL;
+
+    //if head is element
+    if(head->data==k){
+        Node* temp=head;
+        head=head->next;
+        delete temp;
+        return head;
+    }
+
+    Node* prev=NULL;
+    Node* temp=head;
+    while(temp != NULL){
+        if(temp->data==k){
+            prev->next=prev->next->next;
+            delete temp;
+            break;
+        }
+        prev=temp;
+        temp=temp->next;
+    }
+    return head;
+}
