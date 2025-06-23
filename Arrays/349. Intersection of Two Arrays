@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        int m=nums1.size();
+        int n=nums2.size();
+        unordered_set<int>ansSet; //to avoid duplicates in the ans
+        unordered_set<int>st1(nums1.begin(),nums1.end());
+        unordered_set<int>st2(nums2.begin(),nums2.end());
+
+        for(int i=0; i<m; i++){
+            if(st2.find(nums1[i]) != st2.end()){
+                ansSet.insert(nums1[i]);
+            } 
+        }
+        vector<int>ans(ansSet.begin(),ansSet.end()); //putting elements of ansSet into ans vector
+        return ans;
+    }
+};
