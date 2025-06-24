@@ -1,3 +1,30 @@
+//USING STACK
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        stack<int>st;
+        ListNode* temp=head;
+        while(temp != NULL){
+            st.push(temp->val);
+            temp=temp->next;
+        }
+
+        if(st.empty()) return NULL;
+        
+        ListNode* newHead=new ListNode(st.top());
+        st.pop();
+
+        ListNode* curr=newHead;
+
+        while(!st.empty()){
+            curr->next=new ListNode(st.top());
+            st.pop();
+            curr=curr->next;
+        }
+        return newHead;
+    }
+};
+
 //ITERATIVE APPROACH
 class Solution {
 public:
