@@ -27,3 +27,23 @@ class Solution {
         return newHead;
     }
 };
+
+//INPLACE USING SINGLE ITERATION
+class Solution {
+  public:
+    DLLNode* reverseDLL(DLLNode* head) {
+        DLLNode* curr=head;
+        DLLNode* back=NULL;
+        
+        while(curr != NULL){
+            DLLNode* front=curr->next;
+            
+            curr->next=back;
+            curr->prev=front;
+            
+            back=curr;
+            curr=front;
+        }
+        return back;
+    }
+};
