@@ -1,0 +1,37 @@
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if(head==NULL) return NULL;
+
+        //count total nodes
+        ListNode* temp1=head;
+        ListNode* prev=NULL;
+        int totalcount=0;
+        while(temp1 != NULL){
+            totalcount++;
+            temp1=temp1->next;
+        }
+
+        //if head is the nth node from the back
+        if(n==totalcount){
+            ListNode* newHead=head->next;
+            delete head;
+            return newHead;
+        }
+
+        //delete the nth node from the back which is (totalcount-n+1)th node from front
+        ListNode* temp2=head;
+        int count=0;
+        while(temp2 != NULL){
+            count++;
+            if(count == totalcount-n+1){
+                prev->next=prev->next->next;
+                delete temp2;
+                break;
+            }
+            prev=temp2;
+            temp2=temp2->next;
+        }
+        return head;
+    }
+};
