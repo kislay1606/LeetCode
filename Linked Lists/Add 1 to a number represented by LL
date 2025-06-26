@@ -1,0 +1,38 @@
+class Solution {
+  public:
+    Node* reverse(Node* head){
+        Node* prev = NULL;
+        Node* curr = head;
+        
+        while(curr){
+            Node* front = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = front;
+        }
+        return prev;
+    }
+    
+    Node* addOne(Node* head) {
+        head = reverse(head);
+        int carry = 1; // Start with 1 since we need to add 1
+        Node* temp = head;
+        
+        while(temp != NULL){
+            int sum = temp->data + carry;
+            temp->data = sum % 10;
+            carry = sum / 10;
+            
+            if(carry == 0) break;
+            
+            if(temp->next == NULL && carry != 0){
+                temp->next = new Node(carry);
+                break; // No need to continue after adding the new node
+            }
+            
+            temp = temp->next;
+        }
+        
+        return reverse(head);
+    }
+};
