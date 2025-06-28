@@ -27,3 +27,45 @@ class Solution {
         return head;
     }
 };
+
+//OPTIMAL USING RECURSIVE MERGE SORT
+class Solution {
+  public:
+    Node *merge(Node* list1,Node*list2){
+        Node* dummyNode=new Node(-1);
+        Node* res=dummyNode;
+        
+        while(list1 && list2){
+            if(list1->data<list2->data){
+                res->bottom=list1;
+                res=list1;
+                list1=list1->bottom;
+            }
+            else{
+                res->bottom=list2;
+                res=list2;
+                list2=list2->bottom;
+            }
+            
+            res->next=NULL;
+        }
+        if(list1) res->bottom=list1;
+        else res->bottom=list2;
+        
+        Node* newHead=dummyNode->bottom;
+        return newHead;
+    }
+    
+    Node *flatten(Node *root) {
+        //base case
+        if(root==NULL || root->next==NULL) return root;
+        
+        //recursively flatten the rest of the list
+        root->next=flatten(root->next);
+        
+        root=merge(root,root->next);
+        
+        return root;
+        
+    }
+};
