@@ -1,0 +1,37 @@
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL || head->next==NULL) return head;
+        //get the totalcount of nodes in the list
+        int totalcount=0;
+        ListNode* temp=head;
+        while(temp){
+            totalcount++;
+            temp=temp->next;
+        }
+
+        k=k%totalcount; //edge case for(k>=totalcount)
+        if(k==0) return head;
+
+        //find the tail
+        ListNode* tail=head;
+        while(tail->next){
+            tail=tail->next;
+        }
+        
+        temp=head;
+        int count=0;
+        ListNode* newHead=NULL;
+        while(temp && temp->next){
+            count++;
+            if(count==totalcount-k){
+                tail->next=head;
+                newHead=temp->next;
+                temp->next=NULL;
+                return newHead;
+            }
+            temp=temp->next;
+        }
+        return newHead;
+    }
+};
