@@ -1,0 +1,52 @@
+class Solution {
+public:
+    //helper function to reverse a list iteratively
+    ListNode* reverse(ListNode* head) {
+        ListNode* curr=head;
+        ListNode* prev=NULL;
+
+        while(curr != NULL){
+            ListNode* front=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=front;
+        }
+        return prev;
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+
+        if(head==NULL || k==1) return head;
+        
+        ListNode* dummyHead=new ListNode(-1);
+        dummyHead->next=head;
+        ListNode* prevNode=dummyHead;
+        ListNode* temp=head;
+
+        int count=0;
+        while(temp){
+            count++;
+            if(count==k){
+                ListNode* nextNode=temp->next;
+                temp->next=NULL; //point to null in order to reverse the k group
+
+                ListNode* reversedHead=reverse(head); //revers and get the new reversed head
+
+                prevNode->next=reversedHead; //dummynode's next will be reversed head
+
+                head->next=nextNode;
+
+                prevNode=head;
+                
+                head=nextNode; //reassigning the head
+                temp=head;
+
+                count=0; //reset count to get another k group
+            }
+            else temp=temp->next;
+        }
+        ListNode* newHead=dummyHead->next;
+        delete dummyHead;
+        return newHead;
+    }
+};
