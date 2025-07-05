@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        list<int>st;
+        int n=asteroids.size();
+
+        for(int i=0; i<n; i++){
+            //push in stack if positive
+            if(asteroids[i]>0) st.push_back(asteroids[i]);
+
+            else{
+                while(!st.empty() && st.back()>0 && st.back()<abs(asteroids[i])){
+                    st.pop_back(); //pop all smaller elements
+                }
+
+                if(!st.empty() && st.back()==abs(asteroids[i])){
+                    st.pop_back(); //if equal pop
+                }
+                else if(st.empty() || st.back()<0){
+                    st.push_back(asteroids[i]); //push negative only if stack is empty or stack contailns negative
+                }
+            }
+            
+        }
+        return vector<int>(st.begin(),st.end()); //convert list to vector
+    }
+};
