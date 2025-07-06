@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        int n=num.length();
+        string ans="";
+        stack<char>st;
+
+        //edge case k is equal to str length
+        if(k==n) return "0";
+
+        for(int i=0; i<n; i++){
+            while(!st.empty() && k!=0 && st.top()>num[i]){
+                st.pop();
+                k--;
+            }
+
+            if(st.empty()) st.push(num[i]);
+            else st.push(num[i]);
+        }
+ 
+        //edge case when k is still left
+        while(!st.empty() && k!=0){
+            st.pop();
+            k--;
+        }
+
+        while(!st.empty()){
+            ans += st.top();
+            st.pop();
+        }
+
+        reverse(ans.begin(),ans.end());
+
+        //edge case: remove leading zeroes
+        int idx=0;
+        while(idx<ans.length() && ans[idx]=='0'){
+            idx++;
+        }
+
+        ans=ans.substr(idx);
+
+        if(!ans.empty()) return ans;
+        else return "0";
+    }
+};
