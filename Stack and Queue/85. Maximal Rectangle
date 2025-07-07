@@ -1,0 +1,72 @@
+class Solution {
+private:
+    vector<int> getNSE(vector<int>& arr){
+        int n=arr.size();
+        vector<int>ans(n);
+        stack<int>st;
+
+        for(int i=n-1; i>=0; i--){
+            while(!st.empty() && arr[st.top()]>=arr[i]){
+                st.pop();
+            }
+
+            if(st.empty()) ans[i]=n;
+            else ans[i]=st.top();
+
+            st.push(i);
+        }
+        return ans;
+    }
+    vector<int> getPSE(vector<int>& arr){
+        int n=arr.size();
+        vector<int>ans(n);
+        stack<int>st;
+        for(int i=0; i<n; i++){
+            while(!st.empty() && arr[st.top()]>=arr[i]){
+                st.pop();
+            }
+
+            if(st.empty()) ans[i]=-1;
+            else ans[i]=st.top();
+
+            st.push(i);
+        }
+        return ans;
+    }
+    int largestAreaHistogram(vector<int>& arr){
+        int n=arr.size();
+        vector<int>nse=getNSE(arr);
+        vector<int>pse=getPSE(arr);
+        int maxArea=INT_MIN;
+
+        for(int i=0; i<n; i++){
+            int width=nse[i]-pse[i]-1;
+            int area=arr[i]*width;
+
+            maxArea=max(area,maxArea);
+        }
+        return maxArea;
+    }    
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int rows=matrix.size();
+        int cols=matrix[0].size();
+        vector<vector<int>>preSum(rows,vector<int>(cols,0));
+        int maxArea=0;
+
+        for(int j=0; j<cols; j++){
+            int sum=0;
+            for(int i=0; i<rows; i++){
+                sum += 1;
+                if(matrix[i][j]=='0') sum=0;
+
+                preSum[i][j]=sum;
+            }
+        }
+
+        for(int i=0; i<rows; i++){
+            maxArea=max(maxArea,largestAreaHistogram(preSum[i]));
+        }
+        return maxArea;
+    }
+};
