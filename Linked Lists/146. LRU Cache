@@ -1,0 +1,82 @@
+class Node {
+public:
+    int key;
+    int val;
+    Node* prev;
+    Node* next;
+
+    Node(int _key, int _val) {
+        key = _key;
+        val = _val;
+        prev = nullptr;
+        next = nullptr;
+    }
+};
+class LRUCache {
+    
+    unordered_map<int,Node*>mpp;
+    Node* head=new Node(-1,-1);
+    Node* tail=new Node(-1,-1);
+    Node* next;
+    Node* prev;
+    int cap;
+
+    //helper function to delete a node
+    void deleteNode(Node* node){
+        Node* prevNode=node->prev;
+        Node* nextNode=node->next;
+        
+        prevNode->next=nextNode;
+        nextNode->prev=prevNode;
+    }
+    
+    //helper function to add a node after dummyhead in order to show updates
+    void insertAfterHead(Node* node){
+        Node* temp=head->next;
+        node->next=temp;
+        node->prev=head;
+        head->next=node;
+        temp->prev=node;
+    }
+public:
+    LRUCache(int capacity) {
+        cap=capacity;
+        mpp.clear(); //clear the map
+        head->next=tail; //connect the dummy head and tail
+        tail->prev=head;
+    }
+    
+    int get(int key) {
+        if(mpp.find(key)==mpp.end()) return -1; //key not found
+
+        Node* resNode=mpp[key];
+        
+        //update
+        deleteNode(resNode);
+        insertAfterHead(resNode);
+
+        return resNode->val;
+    }
+    
+    void put(int key, int value) {
+        if(mpp.find(key)!=mpp.end()){
+            Node* resNode=mpp[key];
+            resNode->val=value;
+
+            //update
+            deleteNode(resNode);
+            insertAfterHead(resNode);
+        }
+        else{
+            //capacity is full so remove the least recently used
+            if(mpp.size()==cap){
+                Node* resNode=tail->prev;
+                mpp.erase(resNode->key);
+                deleteNode(resNode);
+            }
+            Node* resNode=new Node(key,value);
+            mpp[key]=resNode;
+            insertAfterHead(resNode);
+        }
+    }
+};
