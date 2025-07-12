@@ -1,0 +1,19 @@
+class Solution {
+private:
+    int maxDepth(TreeNode* root){
+        if(root==NULL) return 0;
+        int leftdepth=maxDepth(root->left);
+        int rightdepth=maxDepth(root->right);
+       
+        //check balance
+        if(leftdepth==-1 || rightdepth==-1) return -1;
+        if(abs(leftdepth-rightdepth)>1) return -1;
+
+        return 1+max(leftdepth,rightdepth);
+    }    
+public:
+    bool isBalanced(TreeNode* root) {
+        if(maxDepth(root)==-1) return false;
+        else return true;
+    }
+};
