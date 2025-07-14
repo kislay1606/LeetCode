@@ -1,27 +1,20 @@
 class Solution {
 private:
-    int maxDepth(TreeNode* root){
+    //helper function to get the diameter and height of a tree
+    int maxDepth(TreeNode* root, int&diameter){
         if(root==NULL) return 0;
         
-        int leftDepth=maxDepth(root->left);
-        int rightDepth=maxDepth(root->right);
+        int leftDepth=maxDepth(root->left,diameter);
+        int rightDepth=maxDepth(root->right,diameter);
+
+        diameter=max(diameter,leftDepth+rightDepth);
 
         return 1+max(leftDepth,rightDepth);
     }
 public:
     int diameterOfBinaryTree(TreeNode* root) {
-        if(root==NULL) return 0;
-
-        int maxDiameter=0;
-
-        int leftDepth=maxDepth(root->left);
-        int rightDepth=maxDepth(root->right);
-
-        maxDiameter=max(maxDiameter,leftDepth+rightDepth);
-
-        int leftDiameter = diameterOfBinaryTree(root->left);
-        int rightDiameter = diameterOfBinaryTree(root->right);
-
-        return max(maxDiameter,max(leftDiameter,rightDiameter));
+        int diameter=0;
+        maxDepth(root,diameter);
+        return diameter;
     }
 };
