@@ -1,0 +1,59 @@
+class Solution {
+public:
+    unordered_map<TreeNode*,TreeNode*>parent;
+    TreeNode* startNode;
+    
+    void dfs(TreeNode* root,int start){
+        if(root==NULL) return;
+        if(root->val==start) startNode=root;
+        if(root->left){
+            parent[root->left]=root;
+            dfs(root->left,start);
+        }
+        if(root->right){
+            parent[root->right]=root;
+            dfs(root->right,start);
+        }
+    }
+    int findTime(TreeNode* root,int start,int time){
+        dfs(root,start);
+
+        unordered_set<int>infected;
+
+        queue<TreeNode*>q;
+        q.push(startNode);
+        infected.insert(startNode->val);
+
+        while(!q.empty()){
+            int size=q.size();
+            bool isInfected=false; //to track the time only when node gets infected
+
+            for(int i=0; i<size; i++){
+                TreeNode* curr=q.front();
+                q.pop();
+
+                if(curr->left && !infected.count(curr->left->val)){
+                    q.push(curr->left);
+                    infected.insert(curr->left->val);
+                    isInfected=true;
+                }
+                if(curr->right && !infected.count(curr->right->val)){
+                    q.push(curr->right);
+                    infected.insert(curr->right->val);
+                    isInfected=true;
+                }
+                if(parent.count(curr) && !infected.count(parent[curr]->val)){
+                    q.push(parent[curr]);
+                    infected.insert(parent[curr]->val);
+                    isInfected=true;
+                }
+            }
+            if(isInfected==true) time++;
+        }
+        return time;
+    }
+    int amountOfTime(TreeNode* root, int start) {
+        int time=0;
+        return findTime(root,start,time);
+    }
+};
