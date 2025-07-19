@@ -1,0 +1,36 @@
+//MORRIS TRAVERSAL
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>ans;
+        TreeNode* curr=root;
+
+        while(curr){
+            if(curr->left==NULL){
+                ans.push_back(curr->val);
+                curr=curr->right;
+            }
+            else{
+                //find the Inorder Predecessor
+                TreeNode* IP=curr->left;
+                while(IP->right && IP->right!=curr){
+                    IP=IP->right;
+                }
+
+                //if thread doesnot exist create it
+                if(IP->right==NULL){
+                    IP->right=curr;
+                    curr=curr->left;
+                }
+
+                //if thread exists then delete it
+                else{
+                    IP->right=NULL;
+                    ans.push_back(curr->val);
+                    curr=curr->right;
+                }
+            }
+        }
+        return ans;
+    }
+};
