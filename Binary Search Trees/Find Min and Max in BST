@@ -1,0 +1,20 @@
+class Solution {
+  public:
+    int minValue(Node* root) {
+        if(root==NULL) return 0;
+        Node* curr=root;
+        while(curr->left){
+            curr=curr->left;
+        }
+        return curr->data;
+    }
+    
+    int maxValue(Node* root) {
+        if(root==NULL) return 0;
+        Node* curr=root;
+        while(curr->right){
+            curr=curr->right;
+        }
+        return curr->data;
+    }
+};
