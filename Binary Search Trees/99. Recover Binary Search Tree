@@ -1,0 +1,30 @@
+class Solution {   
+public:
+    void inorder(TreeNode* root,vector<int> &arr){
+        if(root==NULL) return;
+        inorder(root->left,arr);
+        arr.push_back(root->val);
+        inorder(root->right,arr);
+    }
+
+    void fixTree(TreeNode* root,vector<int> &actualIn, int &index){
+        if(root==NULL) return;
+
+        fixTree(root->left,actualIn,index);
+        root->val=actualIn[index];
+        index++;
+        fixTree(root->right,actualIn,index);
+    }
+
+    void recoverTree(TreeNode* root) {
+        vector<int>currIn;
+        inorder(root,currIn);
+
+        vector<int>actualIn=currIn;
+        sort(actualIn.begin(),actualIn.end());
+
+        int index=0;
+        
+        fixTree(root,actualIn,index);
+    }
+};
