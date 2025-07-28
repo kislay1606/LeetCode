@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if(dividend==divisor) return 1;
+
+        bool sign=true; //+ve
+        if(dividend<=0 && divisor>0 || dividend>=0 && divisor<0) sign=false; //-ve
+
+        long long n=abs((long long)dividend);
+        long long d=abs((long long)divisor);
+
+        long long ans=0;
+
+        while(n>=d){
+            int cnt=0;
+            while(n>=(d*1LL<<(cnt+1))){ //d*2^cnt+1
+                cnt++;
+            }
+            ans += 1LL<<cnt; //ans=ans+2^cnt
+            n=n-(d*1LL<<cnt);
+        }
+        if(ans>=1LL<<31 && sign==true) return INT_MAX; //ans>=2^31
+        if(ans>=1LL<<31 && sign==false) return INT_MIN; //ans>=2^-31
+
+        if(sign==true) return ans;
+        else return (-1*ans);
+    }
+};
