@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    void sieve() {}
+
+    vector<int> findPrimeFactors(int N) {
+
+        vector<int>box(N+1,1);
+        vector<int>ans;
+        
+        for(int i=2; i*i<=N; i++){
+            if(box[i]==1){
+                for(int j=i*i; j<=N; j+=i){
+                    box[j]=0;
+                }
+            }
+        }
+        
+        for(int i=2; i<=N&&N>1; i++){
+            if(box[i]==1){
+                while(N%i==0){
+                    ans.push_back(i);
+                    N=N/i;
+                } 
+            } 
+        }
+        
+        return ans;
+        
+    }
+};
