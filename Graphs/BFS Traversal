@@ -1,0 +1,14 @@
+class Solution {
+  public:
+    vector<int> bfs(vector<vector<int>> &adj) {
+        int n=ad.size();
+        vector<int>ans;
+        queue<int>q;
+        q.push(adj[])
+        vector<int>vis(n,0);
+        vis[0]=1;
+        
+        
+        
+    }
+};
