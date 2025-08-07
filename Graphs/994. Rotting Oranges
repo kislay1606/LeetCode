@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int r=grid.size();
+        int c=grid[0].size();
+
+        int maxtime=0;
+
+        queue<pair<pair<int,int>,int>>q; //<<r,c>,t>
+        vector<vector<int>>vis(r,vector<int>(c,0));
+
+        for(int i=0; i<r; i++){
+            for(int j=0; j<c; j++){
+                if(grid[i][j]==2){
+                    vis[i][j]=2;
+                    q.push({{i,j},0});
+                }
+                else vis[i][j]=0;
+            }
+        }
+
+        /*
+        (r,c)
+        up->(r-1,c)
+        down->(r+1,c)
+        left->(r,c-1)
+        right->(r,c+1)
+        */
+
+        int delrow[]={-1,1,0,0}; //U,D,L,R
+        int delcol[]={0,0,-1,1}; //U,D,L,R
+
+        while(!q.empty()){
+            int row=q.front().first.first;
+            int col=q.front().first.second;
+            int time=q.front().second;
+
+            q.pop();
+
+            for(int i=0; i<4; i++){
+                int nrow=row+delrow[i];
+                int ncol=col+delcol[i];
+
+                if(nrow>=0 && nrow<r && ncol>=0 && ncol<c && grid[nrow][ncol]==1 && vis[nrow][ncol]==0){
+                    q.push({{nrow,ncol},time+1});
+                    vis[nrow][ncol]=2;
+                }
+            }
+            maxtime=max(time,maxtime);
+        }
+
+        //check if all the oranges are rotten or not
+        for(int i=0; i<r; i++){
+            for(int j=0; j<c; j++){
+                if(grid[i][j]==1 && vis[i][j]!=2) return -1;
+            }
+        }
+
+        return maxtime;
+    }
+};
