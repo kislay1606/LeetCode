@@ -1,0 +1,61 @@
+class Solution {
+public:
+    void dfs(vector<vector<char>> &matrix, int row, int col, int delrow[], int delcol[], vector<vector<int>> &vis){
+        int r=matrix.size();
+        int c=matrix[0].size();
+
+        vis[row][col]=1;
+
+        for(int i=0; i<4; i++){
+            int nrow=row+delrow[i];
+            int ncol=col+delcol[i];
+
+            if(nrow>=0 && nrow<r && ncol>=0 && ncol<c && vis[nrow][ncol]!=1 && matrix[nrow][ncol]=='O'){
+                dfs(matrix,nrow,ncol,delrow,delcol,vis);
+            }
+        }
+    }
+
+    void solve(vector<vector<char>>& board) {
+        int r=board.size();
+        int c=board[0].size();  
+
+        vector<vector<int>>vis(r,vector<int>(c,0));
+
+        int delrow[]={-1,1,0,0};
+        int delcol[]={0,0,-1,1};
+
+        //boundary traversals
+        //check the first row and last row
+        for(int i=0; i<c; i++){
+            if(board[0][i]=='O' && vis[0][i]!=1){
+                vis[0][i]=1;
+                dfs(board,0,i,delrow,delcol,vis);
+            }
+            if(board[r-1][i]=='O' && vis[r-1][i]!=1){
+                vis[r-1][i]=1;
+                dfs(board,r-1,i,delrow,delcol,vis);
+            }
+        }
+
+        //check the first and last col
+        for(int i=0; i<r; i++){
+            if(board[i][0]=='O' && vis[i][0]!=1){
+                vis[i][0]=1;
+                dfs(board,i,0,delrow,delcol,vis);
+            }
+            if(board[i][c-1]=='O' && vis[i][c-1]!=1){
+                vis[i][c-1]=1;
+                dfs(board,i,c-1,delrow,delcol,vis);
+            }
+        }
+
+        for(int i=0; i<r; i++){
+            for(int j=0; j<c; j++){
+                if(board[i][j]=='O' && vis[i][j]==0){
+                    board[i][j]='X';
+                }
+            }
+        }
+    }
+};
