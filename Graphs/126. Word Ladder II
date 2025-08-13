@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        vector<vector<string>>ans;
+
+        unordered_set<string>st(wordList.begin(),wordList.end());
+
+        queue<vector<string>>q;
+        q.push({beginWord});
+
+        int level=0;
+        vector<string>usedinlvl;
+        usedinlvl.push_back(beginWord);
+
+        while(!q.empty()){
+            vector<string>vec=q.front();
+            q.pop();
+
+            if(vec.size() > level){
+                level++;
+                for(auto it: vec){
+                    st.erase(it);
+                }
+            }
+
+            string word=vec.back();
+
+            if(word==endWord){
+                if(ans.size()==0) ans.push_back(vec);
+                else if(ans[0].size()==vec.size()) ans.push_back(vec);
+            }
+
+            for(int i=0; i<word.size(); i++){
+                char og=word[i];
+                for(char ch='a'; ch<='z'; ch++){
+                    word[i]=ch;
+
+                    if(st.find(word) != st.end()){
+                        vec.push_back(word);
+                        q.push(vec);
+                        usedinlvl.push_back(word);
+                        vec.pop_back(); //popped back as it was just used to push in the q
+                    }
+                }
+                word[i]=og;
+            }
+        }
+        return ans;
+    }
+};
