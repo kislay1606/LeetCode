@@ -1,0 +1,40 @@
+class Solution {
+  private:
+    bool dfs(vector<vector<int>> &adj, vector<int>&vis, vector<int>&pathvis, int node){
+        vis[node]=1;
+        pathvis[node]=1;
+        
+        for(auto neighbour:adj[node]){
+            //not visited
+            if(!vis[neighbour]){
+                if(dfs(adj,vis,pathvis,neighbour)==true) return true;
+            }
+            //node is previously visited but it has to visit in same path 
+            else if(pathvis[neighbour]==1 && vis[neighbour]==1) return true;
+        }
+        pathvis[node]=0;
+        return false;
+    }
+    
+  public:
+    bool isCyclic(int V, vector<vector<int>> &edges) {
+        vector<vector<int>>adj(V);
+        for(int i=0; i<edges.size(); i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            
+            adj[u].push_back(v);
+            //adj[v].push_back(u); //since it is directed graph
+        }
+        
+        vector<int>vis(V,0);
+        vector<int>pathvis(V,0);
+        
+        for(int i=0; i<V; i++){
+            if(!vis[i]){
+                if(dfs(adj,vis,pathvis,i)==true) return true;
+            }
+        }
+        return false;
+    }
+};
