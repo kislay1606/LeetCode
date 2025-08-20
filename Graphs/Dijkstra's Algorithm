@@ -1,0 +1,38 @@
+class Solution {
+  public:
+    vector<int> dijkstra(int V, vector<vector<int>> &edges, int src) {
+        vector<vector<pair<int,int>>>adj(V);
+        for(int i=0; i<edges.size(); i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            int d=edges[i][2];
+            
+            adj[u].push_back({v,d});
+            adj[v].push_back({u,d});
+        }
+        
+        vector<int>dis(V,INT_MAX);
+        dis[src]=0;
+        
+        priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>> >pq; //<dist,node>
+        pq.push({0,src});
+        
+        while(!pq.empty()){
+            int dist=pq.top().first;
+            int node=pq.top().second;
+            pq.pop();
+            
+            //if(dist > dis[node]) continue;
+            
+            for(auto it: adj[node]){
+                int next=it.first;
+                int wt=it.second;
+                if(dis[node]+wt < dis[next]){
+                    dis[next]=dis[node]+wt;
+                    pq.push({dis[next],next});
+                }
+            }
+        }
+        return dis;
+    }
+};
