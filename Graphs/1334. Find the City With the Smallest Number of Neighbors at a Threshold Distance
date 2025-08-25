@@ -1,59 +1,37 @@
 class Solution {
-private:
-    void dijkstra(vector<vector<pair<int,int>>> &adj, int src,vector<int> &dist){
-        int n=adj.size();
-        dist[src]=0;
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        vector<vector<int>>dist(n,vector<int>(n,INT_MAX));
+        for(auto it:edges){
+            dist[it[0]][it[1]]=it[2];
+            dist[it[1]][it[0]]=it[2];
+        }
+        for(int i=0; i<n; i++){
+            dist[i][i]=0;
+        }
 
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
-        pq.push({0,src});
-
-        while(!pq.empty()){
-            int dis=pq.top().first;
-            int node=pq.top().second;
-            pq.pop();
-
-            if(dis > dist[node]) continue;
-           
-            for(auto it:adj[node]){
-                int nextnode=it.first;
-                int nextdis=it.second;
-                int totaldis=nextdis+dis;
-
-                if(totaldis < dist[nextnode]){
-                    dist[nextnode]=totaldis;
-                    pq.push({totaldis,nextnode});
+        for(int via=0; via<n; via++){
+            for(int i=0; i<n; i++){
+                for(int j=0; j<n; j++){
+                    if(dist[i][via]<INT_MAX && dist[via][j]<INT_MAX){
+                        dist[i][j]=min(dist[i][j],dist[i][via]+dist[via][j]);
+                    }
                 }
             }
         }
-    }    
-public:
-    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
-        vector<vector<pair<int,int>>>adj(n);
-        for(int i=0; i<edges.size(); i++){
-            int u=edges[i][0];
-            int v=edges[i][1];
-            int w=edges[i][2];
-
-            adj[u].push_back({v,w});
-            adj[v].push_back({u,w});
-        }
 
         int resultcity=-1;
-        int minreachable=INT_MAX;
+        int countcity=INT_MAX;
 
-        for(int i=0; i<n; i++){
-            vector<int>dist(n,INT_MAX);
-
-            dijkstra(adj,i,dist);
+        for(int currcity=0; currcity<n; currcity++){
             int count=0;
-
-            for(int j=0; j<n; j++){
-                if(j!=i && dist[j] <= distanceThreshold) count++;
+            for(int adjcity=0; adjcity<n; adjcity++){
+                if(dist[currcity][adjcity] <= distanceThreshold) count++;
             }
 
-            if(count < minreachable || (count == minreachable && i>resultcity)){
-                minreachable=count;
-                resultcity=i;
+            if(count < countcity || (count==countcity && currcity>resultcity)){
+                resultcity=currcity;
+                countcity=count;
             }
         }
         return resultcity;
