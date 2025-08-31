@@ -1,0 +1,47 @@
+class Solution {
+    int timer=1;
+private:
+    void dfs(int node,int parent,vector<vector<int>>&adj,vector<int>&vis,vector<int>&time,vector<int>&lowtime,
+    vector<vector<int>>&ans){
+        vis[node]=1;
+        time[node]=lowtime[node]=timer;
+        timer++;
+
+        for(auto it:adj[node]){
+            if(it==parent) continue;
+
+            if(!vis[it]){
+                dfs(it,node,adj,vis,time,lowtime,ans);
+                lowtime[node]=min(lowtime[node],lowtime[it]);
+
+                if(lowtime[it] > time[node]){  //can't reach the child
+                    ans.push_back({node,it});
+                }
+            }
+            else{
+                lowtime[node]=min(lowtime[node],lowtime[it]);
+            }
+        }
+    }
+
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<vector<int>>adj(n);
+        for(int i=0; i<connections.size(); i++){
+            int u=connections[i][0];
+            int v=connections[i][1];
+
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int>vis(n,0);
+        vector<vector<int>>ans;
+
+        vector<int>time(n);
+        vector<int>lowtime(n);
+
+        dfs(0,-1,adj,vis,time,lowtime,ans);
+        return ans;
+    }
+};
