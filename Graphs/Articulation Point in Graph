@@ -1,0 +1,58 @@
+class Solution {
+    int timer=1;
+  private:
+    void dfs(int node,int parent,vector<int>adj[],vector<int>&vis,vector<int>&time,vector<int>&lowtime,vector<int>&mark){
+        vis[node]=1;
+        time[node]=lowtime[node]=timer;
+        timer++;
+        
+        int child=0;
+        
+        for(auto it:adj[node]){
+            if(it == parent) continue;
+            
+            if(!vis[it]){
+                dfs(it,node,adj,vis,time,lowtime,mark);
+                lowtime[node]=min(lowtime[node],lowtime[it]);
+                
+                if(lowtime[it] >= time[node] && parent != -1){
+                    mark[node]=1;
+                }
+                
+                child++;
+            }
+            else{
+                lowtime[node]=min(lowtime[node],time[it]); //it is visited so we have to take time insted of lowtime
+            }
+        }
+        
+        //for 1st node
+        if(parent == -1 && child > 1){
+            mark[node]=1;
+        } 
+    }
+    
+  public:
+    vector<int> articulationPoints(int V, vector<int> adj[]) {
+        vector<int>vis(V,0);
+        
+        vector<int>time(V);
+        vector<int>lowtime(V);
+        
+        vector<int>mark(V); //mark the ans to avoid duplicates
+        
+        for(int i=0; i<V; i++){
+            if(!vis[i]){
+                dfs(i,-1,adj,vis,time,lowtime,mark);
+            }
+        }
+        
+        vector<int>ans;
+        for(int i=0; i<V; i++){
+            if(mark[i]==1) ans.push_back(i);
+        }
+        
+        if(ans.size() == 0) ans.push_back(-1);
+        return ans;
+    }
+};
