@@ -1,0 +1,29 @@
+class Solution {
+private:
+    void solve(int index, vector<int>& candidates, int target, vector<vector<int>>&ans, vector<int>&sub, int sum){
+        int n=candidates.size();
+
+        if(sum>target || index==n) return;
+
+        if(sum==target){
+            ans.push_back(sub);
+            return;
+        }
+
+        //pick
+        sub.push_back(candidates[index]);
+        solve(index,candidates,target,ans,sub,sum+candidates[index]); //same number can be reused
+        sub.pop_back();
+    
+        //not pick
+        solve(index+1,candidates,target,ans,sub,sum);
+    }    
+
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>>ans;
+        vector<int>sub;
+        solve(0,candidates,target,ans,sub,0);
+        return ans;
+    }
+};
