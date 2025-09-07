@@ -1,0 +1,48 @@
+//RECURSION
+class Solution {
+private:
+    int solve(int i,int j,vector<vector<int>>& grid){
+        int r=grid.size();
+        int c=grid[0].size();
+
+        //base case
+        if(i>r-1 || j>c-1) return INT_MAX;
+        if(i==r-1 && j==c-1) return grid[i][j];
+
+        int down=solve(i+1,j,grid);
+        int right=solve(i,j+1,grid);
+
+        return grid[i][j]+min(down,right);
+    }    
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        return solve(0,0,grid);
+    }
+};
+
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int i,int j,vector<vector<int>>& grid,vector<vector<int>>&dp){
+        int r=grid.size();
+        int c=grid[0].size();
+
+        //base case
+        if(i>r-1 || j>c-1) return INT_MAX;
+        if(i==r-1 && j==c-1) return grid[i][j];
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int down=solve(i+1,j,grid,dp);
+        int right=solve(i,j+1,grid,dp);
+
+        return dp[i][j]=grid[i][j]+min(down,right);
+    }    
+public:
+    int minPathSum(vector<vector<int>>& grid){
+        int r=grid.size();
+        int c=grid[0].size();
+        vector<vector<int>>dp(r,vector<int>(c,-1));
+        return solve(0,0,grid,dp);
+    }
+};
