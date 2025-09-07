@@ -1,0 +1,40 @@
+//RECURSION
+class Solution {
+private:
+    int solve(int i, int j, int m, int n){
+        //base case
+        if(i>m-1 || j>n-1) return 0;
+        if(i==m-1 && j==n-1) return 1;
+        
+        int bottom = solve(i+1,j,m,n); //bottom
+        int right = solve(i,j+1,m,n); //right
+
+        return bottom+right;
+    }    
+public:
+    int uniquePaths(int m, int n) {
+        return solve(0,0,m,n);
+    }
+};
+
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int i, int j, int m, int n,vector<vector<int>>&dp){
+        //base case
+        if(i>m-1 || j>n-1) return 0;
+        if(i==m-1 && j==n-1) return 1;
+
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int bottom = solve(i+1,j,m,n,dp); //bottom
+        int right = solve(i,j+1,m,n,dp); //right
+
+        return dp[i][j]=bottom+right;
+    }    
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return solve(0,0,m,n,dp);
+    }
+};
