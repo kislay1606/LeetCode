@@ -1,0 +1,66 @@
+//RECURSION
+class Solution {
+private:
+    int solve(int i,int j,vector<vector<int>>& matrix){
+        int r=matrix.size();
+        int c=matrix[0].size();
+
+        //base case
+        if(i>r-1 || j>c-1 || j<0) return INT_MAX;
+        if(i==r-1) return matrix[i][j];
+
+        int down=solve(i+1,j,matrix);
+        int left_diag=solve(i+1,j-1,matrix);
+        int right_diag=solve(i+1,j+1,matrix);
+
+        return matrix[i][j]+min({down,left_diag,right_diag});
+    }    
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int r=matrix.size();
+        int c=matrix[0].size();
+
+        int ans=INT_MAX;
+
+        for(int j=0; j<c; j++){
+            ans=min(ans,solve(0,j,matrix));
+        }
+        return ans;
+    }
+};
+
+
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int i,int j,vector<vector<int>>& matrix,vector<vector<int>>&dp){
+        int r=matrix.size();
+        int c=matrix[0].size();
+
+        //base case
+        if(i>r-1 || j>c-1 || j<0) return INT_MAX;
+        if(i==r-1) return matrix[i][j];
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int down=solve(i+1,j,matrix,dp);
+        int left_diag=solve(i+1,j-1,matrix,dp);
+        int right_diag=solve(i+1,j+1,matrix,dp);
+
+        return dp[i][j] = matrix[i][j]+min({down,left_diag,right_diag});
+    }    
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int r=matrix.size();
+        int c=matrix[0].size();
+
+        vector<vector<int>>dp(r,vector<int>(c,-1));
+
+        int ans=INT_MAX;
+
+        for(int j=0; j<c; j++){
+            ans=min(ans,solve(0,j,matrix,dp));
+        }
+        return ans;
+    }
+};
