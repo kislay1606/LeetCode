@@ -20,3 +20,29 @@ public:
         return solve(0,arr,target,0);
     }
 };
+
+//MEMOIZATION
+class Solution{  
+private:
+    bool solve(int index,vector<int>&arr,int target,int sum,vector<vector<int>>&dp){
+        int n=arr.size();
+
+        //base case
+        if(sum==target) return true;
+        if(index==n || sum>target) return false;
+
+        if(dp[index][sum] != -1) return dp[index][sum];
+
+        int pick = solve(index+1,arr,target,sum+arr[index],dp);
+
+        int notPick = solve(index+1,arr,target,sum,dp);
+
+        return dp[index][sum] = pick || notPick;
+    }    
+public:
+    bool isSubsetSum(vector<int>arr, int target){
+        int n=arr.size();
+        vector<vector<int>>dp(n,vector<int>(n,-1));
+        return solve(0,arr,target,0,dp);
+    }
+};
