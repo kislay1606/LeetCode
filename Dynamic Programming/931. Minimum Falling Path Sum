@@ -102,3 +102,44 @@ public:
         return ans;
     }
 };
+
+
+//SPACE OPTIMIZATION
+class Solution {  
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int r=matrix.size();
+        int c=matrix[0].size();
+
+        vector<int>front(c,0);
+        for(int j=0; j<c; j++){
+            front[j]=matrix[r-1][j];
+        }
+
+        for(int i=r-2; i>=0; i--){
+            vector<int>curr(c,0);
+            for(int j=c-1; j>=0; j--){
+                int down=matrix[i][j]+front[j];
+                int left_diag=INT_MAX;
+                int right_diag=INT_MAX;
+
+                if(j-1>=0){
+                    left_diag=matrix[i][j]+front[j-1];
+                }
+
+                if(j+1<=c-1){
+                    right_diag=matrix[i][j]+front[j+1];
+                }
+
+                curr[j]=min({down,left_diag,right_diag});
+            }
+            front=curr;
+        }
+
+        int ans=INT_MAX;
+        for(int j=0; j<c; j++){
+            ans=min(ans,front[j]);
+        }
+        return ans;
+    }
+};
