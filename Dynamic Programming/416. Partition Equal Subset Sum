@@ -1,0 +1,62 @@
+//RECUSRION OPTIMIZED
+class Solution {
+private:
+    bool solve(int index,vector<int>& nums,int sum1,int sum2){
+        int n=nums.size();
+
+        //base case
+        //reached last index
+        if(index==n){
+            return sum1==sum2; //if sum1==sum2 return true else return false
+        }
+
+        //pick1
+        if(solve(index+1,nums,sum1+nums[index],sum2)==true) return true;
+
+        //pick2
+        if(solve(index+1,nums,sum1,sum2+nums[index])==true) return true;
+
+        return false;
+    }    
+public:
+    bool canPartition(vector<int>& nums) {
+        int n=nums.size();
+        return solve(0,nums,0,0); //(index,nums,sum1,sum2)
+    }
+};
+
+
+//MEMOIZATION
+class Solution {
+private:
+    bool solve(int index,vector<int>& nums,int target,vector<vector<int>>&dp){
+        int n=nums.size();
+
+        //base case
+        if(target==0) return true;
+        if(index>=n || target<0) return false;
+
+        if(dp[index][target] != -1) return dp[index][target];
+
+        bool pick=false;
+        if(nums[index]<=target){
+            pick=solve(index+1,nums,target-nums[index],dp);
+        }
+        
+        bool notpick=solve(index+1,nums,target,dp);
+
+        return dp[index][target]=pick||notpick;
+    }    
+public:
+    bool canPartition(vector<int>& nums) {
+        int n=nums.size();
+
+        int totalsum=accumulate(nums.begin(),nums.end(),0);
+        if(totalsum%2==1) return false; //odd sum cannot be split into 2 halves
+
+        int target=totalsum/2;
+
+        vector<vector<int>>dp(n,vector<int>(target+1,-1));
+        return solve(0,nums,target,dp);
+    }
+};
