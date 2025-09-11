@@ -1,0 +1,30 @@
+//TABULATION (only for non negative arr)
+class Solution {  
+public:
+    int minimumDifference(vector<int>& nums) {
+        int n=nums.size();
+        int totalsum=accumulate(nums.begin(),nums.end(),0);
+        int mindiff=INT_MAX;
+        vector<vector<bool>>dp(n,vector<bool>(totalsum+1,false));
+
+        for(int i=0; i<n; i++) dp[i][0]=true;
+        if(nums[0]<=totalsum) dp[0][nums[0]]=true;
+
+        for(int i=1; i<n; i++){
+            for(int t=1; t<=totalsum; t++){
+                bool notpick=dp[i-1][t];
+                bool pick=false;
+                if(nums[i]<=t) pick=dp[i-1][t-nums[i]];
+
+                dp[i][t]=pick || notpick;
+            }
+        }
+
+        for(int s1=0; s1<=totalsum; s1++){
+            if(dp[n-1][s1]==true){
+                mindiff=min(mindiff,abs((totalsum-s1)-s1)); //s2-s1
+            }
+        }
+        return mindiff;
+    }
+};
