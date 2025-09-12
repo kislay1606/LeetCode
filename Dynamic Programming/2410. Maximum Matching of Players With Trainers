@@ -1,0 +1,82 @@
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int p,int t,vector<int>& players, vector<int>& trainers,vector<vector<int>>&dp){
+        int m=players.size();
+        int n=trainers.size();
+
+        //base case
+        if(p>=m || t>=n) return 0;
+
+        if(dp[p][t] != -1) return dp[p][t];
+
+        int take=0;
+        if(players[p]<=trainers[t]){
+            take=1+solve(p+1,t+1,players,trainers,dp);
+        }
+
+        int skip=solve(p,t+1,players,trainers,dp);
+
+        return dp[p][t]=max(take,skip);
+    }    
+public:
+    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
+        int m=players.size();
+        int n=trainers.size();
+        sort(players.begin(),players.end());
+        sort(trainers.begin(),trainers.end());
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return solve(0,0,players,trainers,dp);
+    }
+};
+
+//TABULATION
+class Solution {   
+public:
+    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
+        int m=players.size();
+        int n=trainers.size();
+        sort(players.begin(),players.end());
+        sort(trainers.begin(),trainers.end());
+        vector<vector<int>>dp(m+1,vector<int>(n+1,0));
+        
+        for(int p=m-1; p>=0; p--){
+            for(int t=n-1; t>=0; t--){
+                int take=0;
+                if(players[p]<=trainers[t]){
+                    take=1+dp[p+1][t+1];
+                }
+
+                int skip=dp[p][t+1];
+
+                dp[p][t]=max(take,skip);
+            }
+        }
+        return dp[0][0];
+    }
+};
+
+//OPTIMAL - 2 Pointer
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(g.begin(),g.end());
+        sort(s.begin(),s.end());
+
+        int gi=0;
+        int si=0;
+
+        int count=0;
+
+        while(gi<g.size() && si<s.size()){
+            //greed can be satisfied so move to next student and next cookie
+            if(s[si]>=g[gi]){
+                count++;
+                gi++;
+                si++;
+            }
+            else si++; //move to next cookie size for same student greed
+        }
+        return count;
+    }
+};
