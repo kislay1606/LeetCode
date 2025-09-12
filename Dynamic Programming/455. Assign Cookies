@@ -1,0 +1,58 @@
+//RECURSION
+class Solution {
+private:
+    int solve(int gi,int si,vector<int>& g, vector<int>& s){
+        //base case
+        if(gi>=g.size() || si>=s.size()) return 0;
+
+        int count=0;
+
+        //cookie size is big enough to satify greed so increase the student count
+        //move to next student and next cookie
+        if(s[si]>=g[gi]){
+            count=max(count,1+solve(gi+1,si+1,g,s));
+        }
+
+        //skip the cookie and try for same student
+        count=max(count,solve(gi,si+1,g,s));
+
+        return count;
+    }    
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(g.begin(),g.end());
+        sort(s.begin(),s.end());
+        return solve(0,0,g,s);
+    }
+};
+
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int gi,int si,vector<int>& g, vector<int>& s,vector<vector<int>>&dp){
+        //base case
+        if(gi>=g.size() || si>=s.size()) return 0;
+
+        if(dp[gi][si] != -1) return dp[gi][si];
+
+        int count=0;
+
+        //cookie size is big enough to satify greed so increase the student count
+        //move to next student and next cookie
+        if(s[si]>=g[gi]){
+            count=max(count,1+solve(gi+1,si+1,g,s,dp));
+        }
+
+        //skip the cookie and try for same student
+        count=max(count,solve(gi,si+1,g,s,dp));
+
+        return dp[gi][si]=count;
+    }    
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(g.begin(),g.end());
+        sort(s.begin(),s.end());
+        vector<vector<int>>dp(g.size(),vector<int>(s.size(),-1));
+        return solve(0,0,g,s,dp);
+    }
+};
