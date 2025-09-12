@@ -1,0 +1,24 @@
+//OPTIMAL - 2 Pointer
+class Solution {
+public:
+    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
+        sort(players.begin(),players.end());
+        sort(trainers.begin(),trainers.end());
+
+        int p=0;
+        int t=0;
+
+        int count=0;
+
+        while(p<players.size() && t<trainers.size()){
+            if(trainers[t]>=players[p]){
+                count++;
+                p++;
+                t++;
+            }
+            //skip the trainer
+            else t++;
+        }
+        return count;
+    }
+};
