@@ -56,3 +56,35 @@ public:
         return solve(0,0,g,s,dp);
     }
 };
+
+
+//TABULATION
+class Solution {  
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        int m=g.size();
+        int n=s.size();
+        
+        sort(g.begin(),g.end());
+        sort(s.begin(),s.end());
+
+        vector<vector<int>>dp(m+1,vector<int>(n+1,0));
+        
+        for(int greed=m-1; greed>=0; greed--){
+            for(int size=n-1; size>=0; size--){
+                //cookie size is big enough to satify greed so increase the student count
+                //move to next student and next cookie
+                int take=0;
+                if(s[size]>=g[greed]){
+                    take=1+dp[greed+1][size+1];
+                }
+
+                //skip the cookie and try for same student
+                int skip=dp[greed][size+1];
+
+                dp[greed][size]=max(take,skip);
+            }
+        }
+        return dp[0][0];
+    }
+};
