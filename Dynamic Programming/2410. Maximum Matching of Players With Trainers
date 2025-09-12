@@ -59,23 +59,23 @@ public:
 //OPTIMAL - 2 Pointer
 class Solution {
 public:
-    int findContentChildren(vector<int>& g, vector<int>& s) {
-        sort(g.begin(),g.end());
-        sort(s.begin(),s.end());
+    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
+        sort(players.begin(),players.end());
+        sort(trainers.begin(),trainers.end());
 
-        int gi=0;
-        int si=0;
+        int p=0;
+        int t=0;
 
         int count=0;
 
-        while(gi<g.size() && si<s.size()){
-            //greed can be satisfied so move to next student and next cookie
-            if(s[si]>=g[gi]){
+        while(p<players.size() && t<trainers.size()){
+            if(trainers[t]>=players[p]){
                 count++;
-                gi++;
-                si++;
+                p++;
+                t++;
             }
-            else si++; //move to next cookie size for same student greed
+            //skip the trainer
+            else t++;
         }
         return count;
     }
