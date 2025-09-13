@@ -62,3 +62,36 @@ public:
         return ans;
     }
 };
+
+
+//TABULATION
+class Solution {   
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        vector<vector<int>>dp(n,vector<int>(amount+1,1e9));
+        for(int a=0; a<=amount; a++){
+            if(a%coins[0]==0) dp[0][a]=a/coins[0];
+        }
+
+        //edge case
+        if(amount==0) return 0;
+        
+        for(int i=1; i<n; i++){
+            for(int a=0; a<=amount; a++){
+                int take=1e9;
+                if(a>=coins[i]){
+                    take=1+dp[i][a-coins[i]]; //same coin can be reused
+                } 
+                int skip=0+dp[i-1][a];
+
+                dp[i][a]=min(take,skip);
+            }
+        }
+        
+        int ans=dp[n-1][amount];
+        //convert 1e9 to -1
+        if(ans>=1e9) return -1;
+        return ans;
+    }
+};
