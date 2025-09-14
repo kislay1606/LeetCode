@@ -1,0 +1,58 @@
+//RECURSION
+class Solution {
+private:
+    int solve(int index,vector<int>&nums,int target){
+        int n=nums.size();
+
+        //base case
+        if(index==n){
+            if(target==0) return 1;
+            else return 0;
+        }
+
+        //add +
+        int positive=solve(index+1,nums,target-nums[index]);
+
+        //add -
+        int negative=solve(index+1,nums,target+nums[index]);
+
+        return positive+negative;
+    }    
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return solve(0,nums,target);
+    }
+};
+
+
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int index,vector<int>&nums,int target,vector<vector<int>>&dp,int sum){
+        int n=nums.size();
+
+        if(target+sum<0 || target+sum>=2*sum+1) return 0;
+
+        //base case
+        if(index==n){
+            if(target==0) return 1;
+            else return 0;
+        }
+
+        if(dp[index][target+sum] != -1) return dp[index][target+sum];
+
+        //add +
+        int positive=solve(index+1,nums,target-nums[index],dp,sum);
+
+        //add -
+        int negative=solve(index+1,nums,target+nums[index],dp,sum);
+
+        return dp[index][target+sum]=positive+negative;
+    }    
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        vector<vector<int>>dp(nums.size(),vector<int>(2*sum+1,-1));
+        return solve(0,nums,target,dp,sum);
+    }
+};
