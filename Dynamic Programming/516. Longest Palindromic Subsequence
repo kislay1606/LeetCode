@@ -1,0 +1,56 @@
+//RECURSION
+class Solution {
+private:
+    int solve(int index1,int index2,string s,string r){
+        int m=s.size();
+        int n=r.size();
+
+        //base case
+        if(index1>=m || index2>=n) return 0;
+
+        //match
+        if(s[index1] == r[index2]){
+            return 1+solve(index1+1,index2+1,s,r);
+        }
+
+        //not match
+        else return max(solve(index1+1,index2,s,r),solve(index1,index2+1,s,r));
+    } 
+public:
+    int longestPalindromeSubseq(string s) {
+        string r=s;
+        reverse(r.begin(),r.end());
+        return solve(0,0,s,r);
+    }
+};
+
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int index1,int index2,string s,string r,vector<vector<int>>&dp){
+        int m=s.size();
+        int n=r.size();
+
+        //base case
+        if(index1>=m || index2>=n) return 0;
+
+        if(dp[index1][index2] != -1) return dp[index1][index2];
+
+        //match
+        if(s[index1] == r[index2]){
+            return dp[index1][index2]= 1+solve(index1+1,index2+1,s,r,dp);
+        }
+
+        //not match
+        else return dp[index1][index2]= max(solve(index1+1,index2,s,r,dp),solve(index1,index2+1,s,r,dp));
+    }    
+public:
+    int longestPalindromeSubseq(string s) {
+        string r=s;
+        reverse(r.begin(),r.end());
+        int m=s.size();
+        int n=r.size();
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return solve(0,0,s,r,dp);
+    }
+};
