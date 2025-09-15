@@ -54,3 +54,28 @@ public:
         return solve(0,0,s,r,dp);
     }
 };
+
+
+//TABULATION
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        string r=s;
+        reverse(r.begin(),r.end());
+        int m=s.size();
+        int n=r.size();
+        vector<vector<int>>dp(m+1,vector<int>(n+1,0));
+        
+        for(int i=1; i<=m; i++){
+            for(int j=1; j<=n; j++){
+                //match
+                if(s[i-1] == r[j-1]){
+                    dp[i][j]= 1+dp[i-1][j-1];
+                }
+                //not match
+                else dp[i][j]= max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[m][n];
+    }
+};
