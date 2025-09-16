@@ -1,0 +1,63 @@
+//RECURSION
+class Solution {
+private:
+    int longestPalindromicSubsequence(int index1,int index2,string s,string r){
+        int m=s.size();
+        int n=r.size();
+
+        //base case
+        if(index1>=m || index2>=n) return 0;
+
+        //match
+        if(s[index1]==r[index2]){
+            return 1+longestPalindromicSubsequence(index1+1,index2+1,s,r);
+        }
+
+        //not match
+        else return max(longestPalindromicSubsequence(index1+1,index2,s,r),longestPalindromicSubsequence(index1,index2+1,s,r));
+    }    
+public:
+    int minInsertions(string s) {
+        int n=s.size();
+        string r=s;
+        reverse(r.begin(),r.end());
+        int LPS=longestPalindromicSubsequence(0,0,s,r);
+
+        return n-LPS;
+    }
+};
+
+//MEMOIZATION
+class Solution {
+private:
+    int longestPalindromicSubsequence(int index1,int index2,string s,string r,vector<vector<int>>&dp){
+        int m=s.size();
+        int n=r.size();
+
+        //base case
+        if(index1>=m || index2>=n) return 0;
+
+        if(dp[index1][index2] != -1) return dp[index1][index2];
+
+        //match
+        if(s[index1]==r[index2]){
+            return dp[index1][index2]=1+longestPalindromicSubsequence(index1+1,index2+1,s,r,dp);
+        }
+
+        //not match
+        else{
+            return dp[index1][index2]=max(longestPalindromicSubsequence(index1+1,index2,s,r,dp),
+            longestPalindromicSubsequence(index1,index2+1,s,r,dp));
+        } 
+    }    
+public:
+    int minInsertions(string s) {
+        int n=s.size();
+        string r=s;
+        reverse(r.begin(),r.end());
+        vector<vector<int>>dp(n,vector<int>(n,-1));
+        int LPS=longestPalindromicSubsequence(0,0,s,r,dp);
+
+        return n-LPS;
+    }
+};
