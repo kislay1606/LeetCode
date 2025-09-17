@@ -1,0 +1,87 @@
+//RECURSION
+class Solution {
+private:
+    string LCS(int index1,int index2,string str1, string str2){
+        int m=str1.size();
+        int n=str2.size();
+
+        //base case
+        if(index1>=m || index2>=n) return "";
+
+        //match
+        if(str1[index1]==str2[index2]){
+            return str1[index1]+LCS(index1+1,index2+1,str1,str2);
+        }
+
+        else{
+            string op1=LCS(index1+1,index2,str1,str2);
+            string op2=LCS(index1+1,index2,str1,str2);
+            if(op1.size()>op2.size()) return op1;
+            else return op2;
+        } 
+    }    
+public:
+    string shortestCommonSupersequence(string str1, string str2) {
+        string lcs=LCS(0,0,str1,str2);
+
+        string ans="";
+
+        int i=0,j=0;
+        for(char ch:lcs){
+            while(i<str1.size() && str1[i]!=ch) ans+=str1[i++]; //add chars from str1 which are not in LCS
+            while(j<str2.size() && str2[j]!=ch) ans+=str2[j++]; //add chars from str2 which are not in LCS
+            ans+=ch; //add common chars from LCS
+            i++;
+            j++;
+        }
+        //add remaining chars
+        ans+=str1.substr(i)+str2.substr(j);
+        return ans;
+    }
+};
+
+//MEMOIZATION
+class Solution {
+private:
+    string LCS(int index1,int index2,string str1, string str2,vector<vector<string>>&dp){
+        int m=str1.size();
+        int n=str2.size();
+
+        //base case
+        if(index1>=m || index2>=n) return "";
+
+        if(dp[index1][index2] != "") return dp[index1][index2];
+
+        //match
+        if(str1[index1]==str2[index2]){
+            return dp[index1][index2]= str1[index1]+LCS(index1+1,index2+1,str1,str2,dp);
+        }
+        else{
+            string op1=LCS(index1+1,index2,str1,str2,dp);
+            string op2=LCS(index1,index2+1,str1,str2,dp);
+            if(op1.size()>op2.size()) return dp[index1][index2]= op1;
+            else return dp[index1][index2]= op2;
+        } 
+    }    
+public:
+    string shortestCommonSupersequence(string str1, string str2) {
+        int m=str1.size();
+        int n=str2.size();
+        vector<vector<string>>dp(m,vector<string>(n,""));
+        string lcs=LCS(0,0,str1,str2,dp);
+
+        string ans="";
+
+        int i=0,j=0;
+        for(char ch:lcs){
+            while(i<str1.size() && str1[i]!=ch) ans+=str1[i++]; //add chars from str1 which are not in LCS
+            while(j<str2.size() && str2[j]!=ch) ans+=str2[j++]; //add chars from str2 which are not in LCS
+            ans+=ch; //add common chars from LCS
+            i++;
+            j++;
+        }
+        //add remaining chars
+        ans+=str1.substr(i)+str2.substr(j);
+        return ans;
+    }
+};
