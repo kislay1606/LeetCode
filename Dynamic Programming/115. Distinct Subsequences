@@ -1,0 +1,26 @@
+//MEMOIZATION
+class Solution {
+private:
+    int solve(int i,int j,string s,string t,vector<vector<int>>&dp){
+        int m=s.size();
+        int n=t.size();
+
+        //base case
+        if(j>=n) return 1; //all chars of t match
+        if(i>=m) return 0; //all chars of s are exhausted and t doesnt match
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        if(s[i]==t[j]){
+            return dp[i][j]=solve(i+1,j+1,s,t,dp)+solve(i+1,j,s,t,dp); //matched so look for another match
+        }
+        else return dp[i][j]=solve(i+1,j,s,t,dp);
+    }    
+public:
+    int numDistinct(string s, string t) {
+        int m=s.size();
+        int n=t.size();
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return solve(0,0,s,t,dp);
+    }
+};
