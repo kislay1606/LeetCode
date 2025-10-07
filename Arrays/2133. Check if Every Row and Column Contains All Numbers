@@ -4,12 +4,23 @@ public:
     bool checkValid(vector<vector<int>>& matrix) {
         int n=matrix.size();
 
+        //check rows
         for(int i=0; i<n; i++){
             vector<bool>seen(n+1,false);
             for(int j=0; j<n; j++){
                 int val=matrix[i][j];
-                if(val<1 || val>n || seen[val]) return false;
-                seen[val]=true;
+                if(val<1 || val>n || seen[val]) return false; //beyond limits or already seen
+                seen[val]=true; //mark seen
+            }
+        }
+
+        //check cols
+        for(int j=0; j<n; j++){
+            vector<bool>seen(n+1,false);
+            for(int i=0; i<n; i++){
+                int val=matrix[i][j];
+                if(val<1 || val>n || seen[val]) return false; //beyond limits or already seen
+                seen[val]=true; //mark seen
             }
         }
         return true;
